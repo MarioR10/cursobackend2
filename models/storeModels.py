@@ -12,8 +12,11 @@ class StoreModel(db.Model):
     #columnas de la tabla
 
     id=db.Column(db.Integer, primary_key=True)
-    name_store= db.Column(db.String(80), unique=True, nullable=False)
+    name= db.Column(db.String(80), unique=True, nullable=False)
 
     #relacionar dos tablas, traerse toda la informacion de la otra
     items= db.relationship("ItemModel",back_populates="store",lazy="dynamic", cascade="all, delete")  
     tags= db.relationship("TagModel",back_populates="store",lazy="dynamic")  
+
+
+    

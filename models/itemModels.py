@@ -12,9 +12,10 @@ class ItemModel(db.Model):
     #columnas de la tabla
 
     id = db.Column(db.Integer, primary_key=True)
-    name_item= db.Column(db.String(80), unique=True, nullable=False)
+    name= db.Column(db.String(80), unique=True, nullable=False)
     price=db.Column(db.Float(precision=2), unique=False, nullable=False)
     store_id=db.Column(db.Integer, db.ForeignKey("stores.id"), unique=False, nullable=False)
+    descuento= db.Column(db.Float(precision=2), unique=False, nullable=True)
 
     #relacionar dos tablas, traerse toda la informacion de la otra tabla (como un join)
     store=db.relationship("StoreModel", back_populates="items")

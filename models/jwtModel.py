@@ -13,7 +13,7 @@ class JwtModel(db.Model):
 
     #columnas de la tabla
     id= db.Column(db.Integer, primary_key=True)
-    jti= db.Column(db.String(),nullable=False)
+    jti= db.Column(db.String(80),nullable=False)
 
 
 
