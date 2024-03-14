@@ -27,7 +27,7 @@ from blocklist import BLOCKLIST
 
 #CREAR APP DENTRO DE UNA FUNCION
 
-def create_app(db_url=None):
+def create_app():
 
 #Esta instancia de Flask se utiliza para crear servidores web, REST APIs y otras aplicaciones web utilizando el framework Flask.
         app= Flask(__name__) 
@@ -45,7 +45,7 @@ def create_app(db_url=None):
         app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"  # URL de Swagger UI
 
         # Configuración de la base de datos                                         #mysql+mysqlconnector://root:ROOT@host.docker.internal:3306/databasecursodos
-        app.config["SQLALCHEMY_DATABASE_URI"]=  db_url or os.getenv("DATABASE_URL","postgresql+psypsycopg2://postgres:ROOT@http://127.0.0.1:5432/databasecursodos")  # Configuración de la URI de la base de datos
+        app.config["SQLALCHEMY_DATABASE_URI"]=  "postgresql://mario:HIgiz4kz6N6lkvNPVdQebyxZTsO3yIpx@dpg-cnpn2i779t8c73925dlg-a.oregon-postgres.render.com/databasecursodos_u7x5" # Configuración de la URI de la base de datos
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False                                              # Desactivación del seguimiento de modificaciones de SQLAlchemy
         db.init_app(app)                                                                                 # Inicialización de la bade de datos
 
