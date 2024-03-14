@@ -44,8 +44,8 @@ def create_app(db_url=None):
         app.config["OPENAPI_SWAGGER_UI_PATH"] = "/swagger-ui"       # Ruta para la interfaz de usuario de Swagger
         app.config["OPENAPI_SWAGGER_UI_URL"] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"  # URL de Swagger UI
 
-        # Configuración de la base de datos
-        app.config["SQLALCHEMY_DATABASE_URI"]=  db_url or os.getenv("DATABASE_URL","mysql+mysqlconnector://root:ROOT@host.docker.internal:3306/databasecursodos")  # Configuración de la URI de la base de datos
+        # Configuración de la base de datos                                         #mysql+mysqlconnector://root:ROOT@host.docker.internal:3306/databasecursodos
+        app.config["SQLALCHEMY_DATABASE_URI"]=  db_url or os.getenv("DATABASE_URL","postgresql+psypsycopg2://postgres:ROOT@http://127.0.0.1:5432/databasecursodos")  # Configuración de la URI de la base de datos
         app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= False                                              # Desactivación del seguimiento de modificaciones de SQLAlchemy
         db.init_app(app)                                                                                 # Inicialización de la bade de datos
 
