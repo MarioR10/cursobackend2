@@ -3,36 +3,66 @@
 
 #Importar base de datos,modelos,esquemas,abort y Blueprint,MethodView,pbkdf2_sha256 y create_access_token,jwt_required,get_jwt
 #create_refresh_token,BLOCKLIST, get_jwt_identity
-
+import os
+import requests
 from db import db
 from models import UserModel,JwtModel
 from Schemas.userSchema import UserSchema
+from Schemas.userRegisterSchema import UserRegisterSchema
 from flask_smorest import abort, Blueprint
 from flask.views import MethodView
 from passlib.hash import pbkdf2_sha256
 from flask_jwt_extended import create_access_token,create_refresh_token,jwt_required,get_jwt, get_jwt_identity
-from blocklist import BLOCKLIST
-# from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+
+from sqlalchemy import or_
+
 
 
 blp=Blueprint("Users", __name__, description="Operations on users")
 
+#Funcion para enviar un mensaje simple
+def send_simple_message(to,subject,text):
+    
+    domain = os.getenv("MAILGUN_DOMAIN")
+    api_key = os.getenv("MAILGUN_API_KEY")
+    return requests.post(
+        f"https://api.mailgun.net/v3/{domain}/messages",
+        auth=("api", api_key),
+        data={
+            "from": f"Mario Rodriguez <mailgun@{domain}>",
+            "to": [to],
+            "subject": subject,
+            "text": text
+        }
+    )
+
 #Ruta para manejar operaciones para registrar un usuarios
 @blp.route("/register")
 class UserRegister(MethodView):
-    @blp.arguments(UserSchema)
+    @blp.arguments(UserRegisterSchema)
     def post(self,user_data):
 
-        if UserModel.query.filter(UserModel.username==user_data["username"]).first():
-            abort(409,description="The user already exists")
+        if UserModel.query.filter(
+            
+            or_(UserModel.username==user_data["username"],
+                UserModel.email==user_data["email"]
+                )
+                ).first():
+            abort(409,description="The user or email already exists")
 
         user= UserModel(
 
             username=user_data["username"],
+            email=user_data["email"],
             password=pbkdf2_sha256.hash(user_data["password"])
         )
         db.session.add(user)
         db.session.commit()
+        send_simple_message(
+            user_data["email"],
+            "Welcome to the API",
+            "Thanks for signing up for the API. We hope you have an amazing experience with us."
+        )
 
         return {"message": "User created"},201
     
